@@ -16,7 +16,8 @@ CREATE TABLE `RENTALS` (
   `description` varchar(2000),
   `owner_id` integer NOT NULL,
   `created_at` timestamp,
-  `updated_at` timestamp
+  `updated_at` timestamp,
+  FOREIGN KEY (owner_id) REFERENCES USERS(id)
 );
 
 CREATE TABLE `MESSAGES` (
@@ -25,13 +26,9 @@ CREATE TABLE `MESSAGES` (
   `user_id` integer,
   `message` varchar(2000),
   `created_at` timestamp,
-  `updated_at` timestamp
+  `updated_at` timestamp,
+  FOREIGN KEY (rental_id) REFERENCES RENTALS(id),
+  FOREIGN KEY (user_id) REFERENCES USERS(id)
 );
 
 CREATE UNIQUE INDEX `USERS_index` ON `USERS` (`email`);
-
-ALTER TABLE `USERS` ADD FOREIGN KEY (`id`) REFERENCES `RENTALS` (`owner_id`);
-
-ALTER TABLE `USERS` ADD FOREIGN KEY (`id`) REFERENCES `MESSAGES` (`user_id`);
-
-ALTER TABLE `RENTALS` ADD FOREIGN KEY (`id`) REFERENCES `MESSAGES` (`rental_id`);
