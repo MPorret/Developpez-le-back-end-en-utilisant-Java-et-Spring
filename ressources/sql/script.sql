@@ -1,4 +1,4 @@
-CREATE TABLE `USERS` (
+sqlcmd -S myServer\instanceName -iCREATE TABLE `USERS` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
   `email` varchar(255),
   `name` varchar(255),
