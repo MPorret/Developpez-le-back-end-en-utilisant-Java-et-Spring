@@ -1,10 +1,12 @@
 package com.openclassrooms.chatop_api.controller;
 
-import com.openclassrooms.chatop_api.model.AuthResponse;
-import com.openclassrooms.chatop_api.model.DBUser;
+import com.openclassrooms.chatop_api.dto.RegisterDTO;
+import com.openclassrooms.chatop_api.dto.AuthResponse;
+import com.openclassrooms.chatop_api.dto.LoginDTO;
 import com.openclassrooms.chatop_api.services.JWTService;
 import com.openclassrooms.chatop_api.services.UserService;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class LoginController {
+@Tag(name = "Authentification")
+public class AuthenticationController {
 
   private final JWTService jwtService;
   private final UserService userService;
   private final AuthenticationManager authenticationManager;
 
-  public LoginController(
+  public AuthenticationController(
     UserService userService,
     JWTService jwtService,
     AuthenticationManager authenticationManager
@@ -31,12 +34,15 @@ public class LoginController {
   }
 
   @PostMapping("/api/auth/register")
-  public AuthResponse register(@RequestBody DBUser user) {
+  @Operation(
+    summary= "Inscrire un utilisateur"
+  )
+  public AuthResponse register(@RequestBody RegisterDTO registerDTO) {
 
-      userService.registerUser(user);
+      userService.registerUser(registerDTO);
 
       Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+        new UsernamePasswordAuthenticationToken(registerDTO.getEmail(), registerDTO.getPassword())
       );
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -45,8 +51,21 @@ public class LoginController {
       return new AuthResponse(token);
   }
 
-  @PostMapping("/login")
-  public String getToken(Authentication authentication) {
-    return jwtService.generateToken(authentication);
+  @PostMapping("/api/auth/login")
+  @Operation(
+    summary= "Identifier un utilisateur"
+  )
+  public AuthResponse login(@RequestBody LoginDTO loginDTO) {
+
+    userService.logUser(loginDTO);
+
+    Authentication authentication = authenticationManager.authenticate(
+      new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
+    );
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    String token = jwtService.generateToken(authentication);
+    return new AuthResponse(token);
   }
 }

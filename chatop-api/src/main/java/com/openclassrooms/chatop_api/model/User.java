@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table (name = "USERS")
-public class DBUser {
+public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
@@ -32,9 +32,9 @@ public class DBUser {
   @Column(name = "updated_at")
   private Date updatedAt;
 
-  public DBUser() {}
+  public User() {}
 
-  public DBUser(String name, String email, String password) {
+  public User(String name, String email, String password) {
     this.name = name;
     this.email = email;
     this.password = password;
