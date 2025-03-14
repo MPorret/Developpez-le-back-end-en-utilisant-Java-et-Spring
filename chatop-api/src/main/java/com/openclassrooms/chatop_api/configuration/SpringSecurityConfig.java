@@ -2,6 +2,7 @@ package com.openclassrooms.chatop_api.configuration;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +25,8 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 public class SpringSecurityConfig {
 
-  private String jwtKey = "aiiCH1E4tNjrWrRA8W1OnnkYLHyfE67JzVdQ4wF12PyjagJ+O5E53mfUpJZfFdFj";
+  @Value("${jwt.key}")
+  private String jwtKey;
 
   @Autowired
   private CustomUserDetailsService customUserDetailsService;
@@ -35,7 +37,12 @@ public class SpringSecurityConfig {
       .csrf(csrf -> csrf.disable())
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api/auth/register").permitAll()
+        .requestMatchers(
+          "/api/auth/**",
+          "/v3/api-docs/**",
+          "/swagger-ui/**",
+          "/swagger-ui.html"
+        ).permitAll()
         .anyRequest().authenticated())
       .httpBasic(Customizer.withDefaults())
       .build();

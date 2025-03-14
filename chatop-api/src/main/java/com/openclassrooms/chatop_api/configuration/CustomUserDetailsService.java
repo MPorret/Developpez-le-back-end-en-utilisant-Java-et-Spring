@@ -1,30 +1,28 @@
 package com.openclassrooms.chatop_api.configuration;
 
-import com.openclassrooms.chatop_api.model.DBUser;
-import com.openclassrooms.chatop_api.repository.DBUserRepository;
+import com.openclassrooms.chatop_api.model.User;
+import com.openclassrooms.chatop_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
   @Autowired
-  private final DBUserRepository dbUserRepository;
+  private final UserRepository userRepository;
 
-  public CustomUserDetailsService (DBUserRepository dbUserRepository){
-    this.dbUserRepository = dbUserRepository;
+  public CustomUserDetailsService (UserRepository userRepository){
+    this.userRepository = userRepository;
   }
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    DBUser user = dbUserRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
+    return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
   }
 }
