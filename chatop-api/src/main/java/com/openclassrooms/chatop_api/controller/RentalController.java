@@ -33,6 +33,12 @@ public class RentalController {
     return ResponseEntity.ok(response);
   }
 
+  @GetMapping("/api/rentals/{id}")
+  @Operation(summary="Get a specific rental based on id")
+  public Rental getRental(@PathVariable Long id) {
+    return rentalService.getRentalById(id);
+  }
+
   @PostMapping(value = "/api/rentals", consumes = {"multipart/form-data"})
   @Operation(summary= "Create a new rental")
   public ResponseEntity<Map<String, String>> createRental(

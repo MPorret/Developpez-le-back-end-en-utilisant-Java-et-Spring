@@ -3,6 +3,7 @@ package com.openclassrooms.chatop_api.services;
 import com.openclassrooms.chatop_api.dto.RentalDTO;
 import com.openclassrooms.chatop_api.model.Rental;
 import com.openclassrooms.chatop_api.repository.RentalRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class RentalService {
@@ -54,5 +56,9 @@ public class RentalService {
     response.put("message", "Rental created");
 
     return response;
+  }
+
+  public Rental getRentalById(Long id) {
+    return rentalRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Rental not found"));
   }
 }
