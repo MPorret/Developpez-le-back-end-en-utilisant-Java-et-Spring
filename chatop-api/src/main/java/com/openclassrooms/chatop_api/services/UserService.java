@@ -49,10 +49,9 @@ public class UserService {
     }
   }
 
-  public Integer findOwnerId(String email) {
-    User foundOwner = userRepository.findByEmail(email)
-      .orElseThrow(() -> new UsernameNotFoundException("Owner not found"));
-    return foundOwner.getId();
+  public User findUserByEmail(String email) {
+    return userRepository.findByEmail(email)
+      .orElseThrow(() -> new UsernameNotFoundException("User not found"));
   }
 
   public UserDTO findUserById(Integer id) {

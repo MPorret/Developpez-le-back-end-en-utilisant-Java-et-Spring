@@ -73,5 +73,4 @@ public class SpringSecurityConfig {
       .passwordEncoder(bCryptPasswordEncoder);
     return authenticationManagerBuilder.build();
   }
-
 }

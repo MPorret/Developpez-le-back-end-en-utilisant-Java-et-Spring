@@ -51,7 +51,7 @@ public class RentalController {
   ) throws IOException {
 
     RentalDTO newRentalDTO = new RentalDTO(name, surface, price, description);
-    Integer ownerId = userService.findOwnerId(authentication.getName());
+    Integer ownerId = userService.findUserByEmail(authentication.getName()).getId();
 
     Map<String, String> response = rentalService.saveNewRental(newRentalDTO, picture, ownerId);
 

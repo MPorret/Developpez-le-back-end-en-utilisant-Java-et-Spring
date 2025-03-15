@@ -3,6 +3,7 @@ package com.openclassrooms.chatop_api.controller;
 import com.openclassrooms.chatop_api.dto.RegisterDTO;
 import com.openclassrooms.chatop_api.dto.LoginDTO;
 import com.openclassrooms.chatop_api.dto.UserDTO;
+import com.openclassrooms.chatop_api.model.User;
 import com.openclassrooms.chatop_api.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,9 +50,7 @@ public class UserController {
   }
 
   @PostMapping("/api/auth/login")
-  @Operation(
-    summary= "Log an user"
-  )
+  @Operation(summary= "Log an user")
   public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO) {
 
     userService.logUser(loginDTO);
@@ -64,6 +63,13 @@ public class UserController {
     Map<String, String> tokenResponse = userService.formatTokenResponse(authentication);
 
     return ResponseEntity.ok(tokenResponse);
+  }
+
+  @GetMapping("/api/auth/me")
+  @Operation(summary = "Get informations of connected user")
+  public UserDTO getLoggedUser(Authentication authentication){
+    User loggedUser = userService.findUserByEmail(authentication.getName());
+    return new UserDTO(loggedUser);
   }
 
   @GetMapping("/api/user/{id}")
