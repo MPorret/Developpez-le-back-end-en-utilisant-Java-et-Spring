@@ -41,4 +41,10 @@ public class UserService {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password incorrect");
     }
   }
+
+  public Integer foundOwnerId(String email) {
+    User foundOwner = userRepository.findByEmail(email)
+      .orElseThrow(() -> new UsernameNotFoundException("Owner not found"));
+    return foundOwner.getId();
+  }
 }
