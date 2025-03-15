@@ -1,16 +1,19 @@
 package com.openclassrooms.chatop_api.controller;
 
-import com.openclassrooms.chatop_api.dto.MessageResponse;
 import com.openclassrooms.chatop_api.dto.RentalDTO;
+import com.openclassrooms.chatop_api.model.Rental;
 import com.openclassrooms.chatop_api.services.RentalService;
 import com.openclassrooms.chatop_api.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Tag(name = "Rental controller")
@@ -23,11 +26,16 @@ public class RentalController {
     this.userService = userService;
   }
 
+  @GetMapping("/api/rentals")
+  @Operation(summary="Get all the rentals")
+  public ResponseEntity<Map<String, List<Rental>>> getAllRentals(){
+    Map<String, List<Rental>> response = rentalService.getAllRentals();
+    return ResponseEntity.ok(response);
+  }
+
   @PostMapping(value = "/api/rentals", consumes = {"multipart/form-data"})
-  @Operation(
-    summary= "Create a new rental"
-  )
-  public MessageResponse createRental(
+  @Operation(summary= "Create a new rental")
+  public ResponseEntity<Map<String, String>> createRental(
     @RequestPart("picture") MultipartFile picture,
     @RequestParam("name") String name,
     @RequestParam("description") String description,
@@ -39,9 +47,8 @@ public class RentalController {
     RentalDTO newRentalDTO = new RentalDTO(name, surface, price, description);
     Integer ownerId = userService.foundOwnerId(authentication.getName());
 
-    rentalService.saveNewRental(newRentalDTO, picture, ownerId);
+    Map<String, String> response = rentalService.saveNewRental(newRentalDTO, picture, ownerId);
 
-    String message = "Rental created";
-    return new MessageResponse(message);
+    return ResponseEntity.ok(response);
   }
 }

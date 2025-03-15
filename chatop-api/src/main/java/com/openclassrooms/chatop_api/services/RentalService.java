@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class RentalService {
@@ -21,7 +24,13 @@ public class RentalService {
     this.rentalRepository = rentalRepository;
   }
 
-  public void saveNewRental(RentalDTO rentalDTO, MultipartFile picture, Integer ownerId) throws IOException {
+  public Map<String, List<Rental>> getAllRentals(){
+    Map<String, List<Rental>> response = new HashMap<>();
+    response.put("rentals", rentalRepository.findAll());
+    return response;
+  }
+
+  public Map<String, String> saveNewRental(RentalDTO rentalDTO, MultipartFile picture, Integer ownerId) throws IOException {
     // Save the picture
     String filePath = null;
     if (!picture.isEmpty()) {
@@ -40,5 +49,10 @@ public class RentalService {
     );
 
     rentalRepository.save(newRental);
+
+    Map<String, String> response = new HashMap<>();
+    response.put("message", "Rental created");
+
+    return response;
   }
 }
