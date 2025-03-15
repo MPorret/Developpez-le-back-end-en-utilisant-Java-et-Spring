@@ -2,6 +2,7 @@ package com.openclassrooms.chatop_api.controller;
 
 import com.openclassrooms.chatop_api.dto.RegisterDTO;
 import com.openclassrooms.chatop_api.dto.LoginDTO;
+import com.openclassrooms.chatop_api.dto.UserDTO;
 import com.openclassrooms.chatop_api.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,20 +11,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@Tag(name = "Authentification")
-public class AuthenticationController {
+@Tag(name = "User's routes")
+public class UserController {
 
   private final UserService userService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthenticationController(
+  public UserController(
     UserService userService,
     AuthenticationManager authenticationManager
   ) {
@@ -65,5 +64,11 @@ public class AuthenticationController {
     Map<String, String> tokenResponse = userService.formatTokenResponse(authentication);
 
     return ResponseEntity.ok(tokenResponse);
+  }
+
+  @GetMapping("/api/user/{id}")
+  @Operation(summary = "Get informations about a specific user")
+  public UserDTO getUser (@PathVariable Integer id){
+    return userService.findUserById(id);
   }
 }

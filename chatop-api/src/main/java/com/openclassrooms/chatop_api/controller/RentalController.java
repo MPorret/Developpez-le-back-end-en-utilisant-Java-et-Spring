@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@Tag(name = "Rental controller")
+@Tag(name = "Rental's routes")
 public class RentalController {
   private final RentalService rentalService;
   private final UserService userService;
@@ -51,7 +51,7 @@ public class RentalController {
   ) throws IOException {
 
     RentalDTO newRentalDTO = new RentalDTO(name, surface, price, description);
-    Integer ownerId = userService.foundOwnerId(authentication.getName());
+    Integer ownerId = userService.findOwnerId(authentication.getName());
 
     Map<String, String> response = rentalService.saveNewRental(newRentalDTO, picture, ownerId);
 

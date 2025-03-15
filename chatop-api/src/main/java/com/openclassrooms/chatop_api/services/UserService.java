@@ -1,7 +1,7 @@
 package com.openclassrooms.chatop_api.services;
 
-import com.nimbusds.jwt.JWT;
 import com.openclassrooms.chatop_api.dto.RegisterDTO;
+import com.openclassrooms.chatop_api.dto.UserDTO;
 import com.openclassrooms.chatop_api.model.User;
 import com.openclassrooms.chatop_api.dto.LoginDTO;
 import com.openclassrooms.chatop_api.repository.UserRepository;
@@ -49,10 +49,15 @@ public class UserService {
     }
   }
 
-  public Integer foundOwnerId(String email) {
+  public Integer findOwnerId(String email) {
     User foundOwner = userRepository.findByEmail(email)
       .orElseThrow(() -> new UsernameNotFoundException("Owner not found"));
     return foundOwner.getId();
+  }
+
+  public UserDTO findUserById(Integer id) {
+    User user = userRepository.findById(id).orElseThrow();
+    return new UserDTO(user);
   }
 
   public Map<String, String> formatTokenResponse(Authentication authentication){
