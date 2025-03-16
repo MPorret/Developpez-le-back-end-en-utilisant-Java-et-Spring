@@ -11,7 +11,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class LoginDTO {
   @Schema(description = "Identifiant de l'utilisateur", example = "john@doe.com")
-  @JsonProperty("login")
+  @JsonProperty("email")
   private String email;
 
   @Schema(description = "Mot de passe de l'utilisateur", example = "J0hnDoe!")

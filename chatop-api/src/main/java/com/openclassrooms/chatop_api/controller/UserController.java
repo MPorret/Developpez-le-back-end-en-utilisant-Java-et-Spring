@@ -1,71 +1,80 @@
 package com.openclassrooms.chatop_api.controller;
 
 import com.openclassrooms.chatop_api.dto.RegisterDTO;
-import com.openclassrooms.chatop_api.dto.AuthResponse;
 import com.openclassrooms.chatop_api.dto.LoginDTO;
-import com.openclassrooms.chatop_api.services.JWTService;
+import com.openclassrooms.chatop_api.dto.UserDTO;
+import com.openclassrooms.chatop_api.model.User;
 import com.openclassrooms.chatop_api.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
-@Tag(name = "Authentification")
-public class AuthenticationController {
+@Tag(name = "User's routes")
+public class UserController {
 
-  private final JWTService jwtService;
   private final UserService userService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthenticationController(
+  public UserController(
     UserService userService,
-    JWTService jwtService,
     AuthenticationManager authenticationManager
   ) {
     this.userService = userService;
-    this.jwtService = jwtService;
     this.authenticationManager = authenticationManager;
   }
 
   @PostMapping("/api/auth/register")
   @Operation(
-    summary= "Inscrire un utilisateur"
+    summary= "Register an user"
   )
-  public AuthResponse register(@RequestBody RegisterDTO registerDTO) {
+  public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDTO registerDTO) {
 
       userService.registerUser(registerDTO);
 
       Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(registerDTO.getEmail(), registerDTO.getPassword())
       );
-
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
-      String token = jwtService.generateToken(authentication);
-      return new AuthResponse(token);
+      Map<String, String> tokenResponse = userService.formatTokenResponse(authentication);
+
+      return ResponseEntity.ok(tokenResponse);
   }
 
   @PostMapping("/api/auth/login")
-  @Operation(
-    summary= "Identifier un utilisateur"
-  )
-  public AuthResponse login(@RequestBody LoginDTO loginDTO) {
+  @Operation(summary= "Log an user")
+  public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO) {
 
     userService.logUser(loginDTO);
 
     Authentication authentication = authenticationManager.authenticate(
       new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
     );
-
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    String token = jwtService.generateToken(authentication);
-    return new AuthResponse(token);
+    Map<String, String> tokenResponse = userService.formatTokenResponse(authentication);
+
+    return ResponseEntity.ok(tokenResponse);
+  }
+
+  @GetMapping("/api/auth/me")
+  @Operation(summary = "Get informations of connected user")
+  public UserDTO getLoggedUser(Authentication authentication){
+    User loggedUser = userService.findUserByEmail(authentication.getName());
+    return new UserDTO(loggedUser);
+  }
+
+  @GetMapping("/api/user/{id}")
+  @Operation(summary = "Get informations about a specific user")
+  public UserDTO getUser (@PathVariable Integer id){
+    return userService.findUserById(id);
   }
 }
