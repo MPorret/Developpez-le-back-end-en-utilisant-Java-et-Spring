@@ -28,14 +28,14 @@ public class RentalController {
 
   @GetMapping("/api/rentals")
   @Operation(summary="Get all the rentals")
-  public ResponseEntity<Map<String, List<Rental>>> getAllRentals(){
-    Map<String, List<Rental>> response = rentalService.getAllRentals();
+  public ResponseEntity<Map<String, List<RentalDTO>>> getAllRentals(){
+    Map<String, List<RentalDTO>> response = rentalService.getAllRentals();
     return ResponseEntity.ok(response);
   }
 
   @GetMapping("/api/rentals/{id}")
   @Operation(summary="Get a specific rental based on id")
-  public Rental getRental(@PathVariable Long id) {
+  public RentalDTO getRentalById(@PathVariable Long id) {
     return rentalService.getRentalById(id);
   }
 
@@ -50,10 +50,9 @@ public class RentalController {
     Authentication authentication
   ) throws IOException {
 
-    RentalDTO newRentalDTO = new RentalDTO(name, surface, price, description);
     Integer ownerId = userService.findUserByEmail(authentication.getName()).getId();
 
-    Map<String, String> response = rentalService.saveNewRental(newRentalDTO, picture, ownerId);
+    Map<String, String> response = rentalService.saveNewRental(name, description, price, surface, picture, ownerId);
 
     return ResponseEntity.ok(response);
   }

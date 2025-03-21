@@ -32,9 +32,7 @@ public class UserController {
   }
 
   @PostMapping("/api/auth/register")
-  @Operation(
-    summary= "Register an user"
-  )
+  @Operation(summary= "Register an user")
   public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDTO registerDTO) {
 
       userService.registerUser(registerDTO);

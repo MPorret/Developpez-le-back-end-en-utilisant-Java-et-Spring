@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Getter
@@ -17,16 +18,18 @@ public class UserDTO {
   private String email;
 
   @JsonProperty("created_at")
-  private Date createdAt;
+  private String createdAt;
 
   @JsonProperty("updated_at")
-  private Date updatedAt;
+  private String updatedAt;
 
   public UserDTO (User user) {
+    SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+
     this.id = user.getId();
     this.name = user.getName();
     this.email = user.getEmail();
-    this.createdAt = user.getCreatedAt();
-    this.updatedAt = user.getUpdatedAt();
+    this.createdAt = formatDate.format(user.getCreatedAt());
+    this.updatedAt = formatDate.format(user.getUpdatedAt());
   }
 }

@@ -3,50 +3,53 @@ package com.openclassrooms.chatop_api.services;
 import com.openclassrooms.chatop_api.dto.RentalDTO;
 import com.openclassrooms.chatop_api.model.Rental;
 import com.openclassrooms.chatop_api.repository.RentalRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class RentalService {
-  private static final String UPLOAD_DIR = "uploads/";
   private final RentalRepository rentalRepository;
+  private final FileService fileService;
 
-  public RentalService (RentalRepository rentalRepository) {
+  public RentalService (RentalRepository rentalRepository, FileService fileService) {
     this.rentalRepository = rentalRepository;
+    this.fileService = fileService;
   }
 
-  public Map<String, List<Rental>> getAllRentals(){
-    Map<String, List<Rental>> response = new HashMap<>();
-    response.put("rentals", rentalRepository.findAll());
+  public Map<String, List<RentalDTO>> getAllRentals(){
+    Map<String, List<RentalDTO>> response = new HashMap<>();
+    response.put("rentals",
+      rentalRepository.findAll()
+        .stream().map(RentalDTO::new)
+        .collect(Collectors.toList()));
     return response;
   }
 
-  public Map<String, String> saveNewRental(RentalDTO rentalDTO, MultipartFile picture, Integer ownerId) throws IOException {
-    // Save the picture
-    String filePath = null;
-    if (!picture.isEmpty()) {
-      Path destinationPath = Path.of(UPLOAD_DIR, picture.getOriginalFilename());
-      Files.copy(picture.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
-      filePath = destinationPath.toString();
-    }
+  public Map<String, String> saveNewRental(
+    String name,
+    String description,
+    Integer price,
+    Integer surface,
+    MultipartFile picture,
+    Integer ownerId
+  ) throws IOException {
+
+    String filePath = fileService.saveFile(picture);
 
     Rental newRental = new Rental(
-      rentalDTO.getName(),
-      rentalDTO.getSurface(),
-      rentalDTO.getPrice(),
+      name,
+      surface,
+      price,
       filePath,
-      rentalDTO.getDescription(),
+      description,
       ownerId
     );
 
@@ -58,7 +61,7 @@ public class RentalService {
     return response;
   }
 
-  public Rental getRentalById(Long id) {
+  public RentalDTO getRentalById(Long id) {
     return rentalRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Rental not found"));
   }
 }
