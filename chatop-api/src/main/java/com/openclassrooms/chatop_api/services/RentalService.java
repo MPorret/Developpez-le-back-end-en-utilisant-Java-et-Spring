@@ -4,7 +4,6 @@ import com.openclassrooms.chatop_api.dto.RentalDTO;
 import com.openclassrooms.chatop_api.model.Rental;
 import com.openclassrooms.chatop_api.repository.RentalRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -61,7 +60,20 @@ public class RentalService {
     return response;
   }
 
-  public RentalDTO getRentalById(Long id) {
+  public Rental getRentalById(Long id) {
     return rentalRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Rental not found"));
+  }
+
+  public Map<String, String> updateRental(Rental rental, String name, String description, Integer price, Integer surface) {
+    rental.setName(name);
+    rental.setPrice(price);
+    rental.setDescription(description);
+    rental.setSurface(surface);
+    rentalRepository.save(rental);
+
+    Map<String, String> response = new HashMap<>();
+    response.put("message", "Rental updated");
+
+    return response;
   }
 }
