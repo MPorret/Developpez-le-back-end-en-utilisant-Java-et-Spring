@@ -3,11 +3,9 @@ package com.openclassrooms.chatop_api.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.openclassrooms.chatop_api.model.Rental;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +39,9 @@ public class RentalDTO {
   @JsonProperty("updated_at")
   private String updatedAt;
 
+  @Schema(description = "Owner id of the rental", example = "2")
+  private Integer ownerId;
+
   public RentalDTO(Rental rental) {
     SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
     List<String> pictureList = new ArrayList<String>();
@@ -54,5 +55,6 @@ public class RentalDTO {
     this.description = rental.getDescription();
     this.createdAt = formatDate.format(rental.getCreatedAt());
     this.updatedAt = formatDate.format(rental.getUpdatedAt());
+    this.ownerId = rental.getOwnerId();
   }
 }

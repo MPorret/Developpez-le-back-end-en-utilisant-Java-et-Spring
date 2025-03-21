@@ -36,7 +36,7 @@ public class RentalController {
   @GetMapping("/api/rentals/{id}")
   @Operation(summary="Get a specific rental based on id")
   public RentalDTO getRentalById(@PathVariable Long id) {
-    return rentalService.getRentalById(id);
+    return new RentalDTO(rentalService.getRentalById(id));
   }
 
   @PostMapping(value = "/api/rentals", consumes = {"multipart/form-data"})
@@ -54,6 +54,19 @@ public class RentalController {
 
     Map<String, String> response = rentalService.saveNewRental(name, description, price, surface, picture, ownerId);
 
+    return ResponseEntity.ok(response);
+  }
+
+  @PutMapping("/api/rentals/{id}")
+  @Operation(summary = "Modify a rental")
+  public ResponseEntity<Map<String, String>> updateRental(
+    @PathVariable Long id,
+    @RequestParam("name") String name,
+    @RequestParam("description") String description,
+    @RequestParam("price") Integer price,
+    @RequestParam("surface") Integer surface){
+    Rental rental = rentalService.getRentalById(id);
+    Map<String, String> response = rentalService.updateRental(rental, name, description, price, surface);
     return ResponseEntity.ok(response);
   }
 }

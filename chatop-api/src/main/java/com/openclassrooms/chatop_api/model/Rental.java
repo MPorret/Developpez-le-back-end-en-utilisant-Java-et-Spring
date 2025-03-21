@@ -1,7 +1,7 @@
 package com.openclassrooms.chatop_api.model;
 
+import com.openclassrooms.chatop_api.dto.RentalDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
