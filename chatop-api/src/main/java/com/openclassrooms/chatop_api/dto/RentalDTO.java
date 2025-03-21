@@ -39,6 +39,7 @@ public class RentalDTO {
   @JsonProperty("updated_at")
   private String updatedAt;
 
+  @JsonProperty("owner_id")
   @Schema(description = "Owner id of the rental", example = "2")
   private Integer ownerId;
 

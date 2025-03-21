@@ -1,17 +1,14 @@
 package com.openclassrooms.chatop_api.services;
 
-import com.openclassrooms.chatop_api.dto.RentalDTO;
 import com.openclassrooms.chatop_api.model.Rental;
 import com.openclassrooms.chatop_api.repository.RentalRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 public class RentalService {
@@ -23,16 +20,11 @@ public class RentalService {
     this.fileService = fileService;
   }
 
-  public Map<String, List<RentalDTO>> getAllRentals(){
-    Map<String, List<RentalDTO>> response = new HashMap<>();
-    response.put("rentals",
-      rentalRepository.findAll()
-        .stream().map(RentalDTO::new)
-        .collect(Collectors.toList()));
-    return response;
+  public List<Rental> getAllRentals(){
+   return rentalRepository.findAll();
   }
 
-  public Map<String, String> saveNewRental(
+  public void saveNewRental(
     String name,
     String description,
     Integer price,
@@ -53,27 +45,19 @@ public class RentalService {
     );
 
     rentalRepository.save(newRental);
-
-    Map<String, String> response = new HashMap<>();
-    response.put("message", "Rental created");
-
-    return response;
   }
 
   public Rental getRentalById(Long id) {
-    return rentalRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Rental not found"));
+    return rentalRepository.findById(id)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Rental not found"));
   }
 
-  public Map<String, String> updateRental(Rental rental, String name, String description, Integer price, Integer surface) {
+  public void updateRental(Rental rental, String name, String description, Integer price, Integer surface) {
     rental.setName(name);
     rental.setPrice(price);
     rental.setDescription(description);
     rental.setSurface(surface);
+
     rentalRepository.save(rental);
-
-    Map<String, String> response = new HashMap<>();
-    response.put("message", "Rental updated");
-
-    return response;
   }
 }
