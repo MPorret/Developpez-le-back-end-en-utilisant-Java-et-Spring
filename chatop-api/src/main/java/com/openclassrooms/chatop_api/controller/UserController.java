@@ -7,6 +7,7 @@ import com.openclassrooms.chatop_api.dto.UserDTO;
 import com.openclassrooms.chatop_api.model.User;
 import com.openclassrooms.chatop_api.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,7 @@ public class UserController {
     return new TokenDTO(response);
   }
 
+  @SecurityRequirement(name = "bearerAuth")
   @GetMapping("/api/auth/me")
   @Operation(summary = "Get information of connected user")
   public UserDTO getLoggedUser(Authentication authentication){
@@ -48,6 +50,7 @@ public class UserController {
     return new UserDTO(loggedUser);
   }
 
+  @SecurityRequirement(name = "bearerAuth")
   @GetMapping("/api/user/{id}")
   @Operation(summary = "Get information about a specific user")
   public UserDTO getUser (@PathVariable Integer id){

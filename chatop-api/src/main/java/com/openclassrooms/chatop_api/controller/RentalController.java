@@ -7,6 +7,7 @@ import com.openclassrooms.chatop_api.model.Rental;
 import com.openclassrooms.chatop_api.services.RentalService;
 import com.openclassrooms.chatop_api.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Rental's routes")
 public class RentalController {
   private final RentalService rentalService;
