@@ -27,18 +27,14 @@ public class UserController {
   @PostMapping("/api/auth/register")
   @Operation(summary= "Register an user")
   public TokenDTO register(@RequestBody RegisterDTO registerDTO) {
-
       String response = userService.registerUser(registerDTO);
-
       return new TokenDTO(response);
   }
 
   @PostMapping("/api/auth/login")
   @Operation(summary= "Log an user")
   public TokenDTO login(@RequestBody LoginDTO loginDTO) {
-
     String response = userService.logUser(loginDTO);
-
     return new TokenDTO(response);
   }
 

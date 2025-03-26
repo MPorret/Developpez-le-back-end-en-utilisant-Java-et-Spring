@@ -2,14 +2,18 @@ package com.openclassrooms.chatop_api.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
-@Table (name = "`USERS`")
+@RequiredArgsConstructor
+@Table (name = "USERS")
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,8 +35,6 @@ public class User {
   @UpdateTimestamp
   @Column(name = "updated_at")
   private Date updatedAt;
-
-  public User() {}
 
   public User(String name, String email, String password) {
     this.name = name;

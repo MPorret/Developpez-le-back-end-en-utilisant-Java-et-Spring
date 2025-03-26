@@ -39,7 +39,7 @@ public class RentalController {
 
   @GetMapping("/api/rentals/{id}")
   @Operation(summary="Get a specific rental based on id")
-  public RentalDTO getRentalById(@PathVariable Long id) {
+  public RentalDTO getRentalById(@PathVariable Integer id) {
     return new RentalDTO(rentalService.getRentalById(id));
   }
 
@@ -64,7 +64,7 @@ public class RentalController {
   @PutMapping("/api/rentals/{id}")
   @Operation(summary = "Modify a rental")
   public ResponseDTO updateRental(
-    @PathVariable Long id,
+    @PathVariable Integer id,
     @RequestParam("name") String name,
     @RequestParam("description") String description,
     @RequestParam("price") Integer price,
