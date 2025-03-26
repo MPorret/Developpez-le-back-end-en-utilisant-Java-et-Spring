@@ -1,5 +1,6 @@
 package com.openclassrooms.chatop_api.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -12,12 +13,9 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 @Service
+@RequiredArgsConstructor
 public class JWTService {
-  private JwtEncoder jwtEncoder;
-
-  public JWTService(JwtEncoder jwtEncoder) {
-    this.jwtEncoder = jwtEncoder;
-  }
+  private final JwtEncoder jwtEncoder;
 
   public String generateToken(Authentication authentication) {
     Instant now = Instant.now();

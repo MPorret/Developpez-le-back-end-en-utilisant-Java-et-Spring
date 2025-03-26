@@ -11,15 +11,15 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class RegisterDTO {
 
-  @Schema(description = "Email de l'utilisateur", example = "john@doe.com")
+  @Schema(description = "User's email", example = "john@doe.com")
   @JsonProperty("email")
   private String email;
 
-  @Schema(description = "Nom de l'utilisateur", example = "John Doe")
+  @Schema(description = "User's name", example = "John Doe")
   @JsonProperty("name")
   private String name;
 
-  @Schema(description = "Mot de passe de l'utilisateur", example = "J0hnDoe!")
+  @Schema(description = "User's password", example = "J0hnDoe!")
   @JsonProperty("password")
   private String password;
 }
