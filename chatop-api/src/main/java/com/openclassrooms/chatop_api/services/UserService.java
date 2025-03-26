@@ -1,7 +1,6 @@
 package com.openclassrooms.chatop_api.services;
 
 import com.openclassrooms.chatop_api.dto.RegisterDTO;
-import com.openclassrooms.chatop_api.dto.UserDTO;
 import com.openclassrooms.chatop_api.model.User;
 import com.openclassrooms.chatop_api.dto.LoginDTO;
 import com.openclassrooms.chatop_api.repository.UserRepository;
@@ -10,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,8 +28,10 @@ public class UserService {
   }
 
     public String registerUser(RegisterDTO registerDTO) {
-    userRepository.findByEmail(registerDTO.getEmail())
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"email already used"));
+
+    if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()){
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"email already used");
+    }
 
     User newUser = new User(
       registerDTO.getName(),
@@ -42,8 +42,8 @@ public class UserService {
     userRepository.save(newUser);
 
     return authUser(
-      registerDTO.getName(),
-      registerDTO.getEmail()
+      registerDTO.getEmail(),
+      registerDTO.getPassword()
     );
   }
 

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -27,25 +28,24 @@ public class RentalDTO {
   @Schema(description = "Price of the rental", example = "153")
   private Integer price;
 
-  @Schema(description = "Picture of the rental", example = "['https://blog.technavio.org/wp-content/uploads/2018/12/Online-House-Rental-Sites.jpg\']")
+  @Schema(description = "Picture of the rental", example = "['https://blog.technavio.org/wp-content/uploads/2018/12/Online-House-Rental-Sites.jpg']")
   private List<String> picture;
 
   @Schema(description = "Description of the rental", example = "Amazing house with a view")
   private String description;
 
   @JsonProperty("created_at")
-  private String createdAt;
+  private Date createdAt;
 
   @JsonProperty("updated_at")
-  private String updatedAt;
+  private Date updatedAt;
 
   @JsonProperty("owner_id")
   @Schema(description = "Owner id of the rental", example = "2")
   private Integer ownerId;
 
   public RentalDTO(Rental rental) {
-    SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
-    List<String> pictureList = new ArrayList<String>();
+    List<String> pictureList = new ArrayList<>();
     pictureList.add("http://localhost:3001/" + rental.getPicture());
 
     this.id = rental.getId();
@@ -54,8 +54,8 @@ public class RentalDTO {
     this.price = rental.getPrice();
     this.picture = pictureList;
     this.description = rental.getDescription();
-    this.createdAt = formatDate.format(rental.getCreatedAt());
-    this.updatedAt = formatDate.format(rental.getUpdatedAt());
-    this.ownerId = rental.getOwnerId();
+    this.createdAt = rental.getCreatedAt();
+    this.updatedAt = rental.getUpdatedAt();
+    this.ownerId = rental.getOwner().getId();
   }
 }

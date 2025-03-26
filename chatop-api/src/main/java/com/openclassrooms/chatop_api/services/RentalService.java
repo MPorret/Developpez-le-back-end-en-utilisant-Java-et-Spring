@@ -1,6 +1,7 @@
 package com.openclassrooms.chatop_api.services;
 
 import com.openclassrooms.chatop_api.model.Rental;
+import com.openclassrooms.chatop_api.model.User;
 import com.openclassrooms.chatop_api.repository.RentalRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,12 @@ import java.util.List;
 public class RentalService {
   private final RentalRepository rentalRepository;
   private final FileService fileService;
+  private final UserService userService;
 
-  public RentalService (RentalRepository rentalRepository, FileService fileService) {
+  public RentalService (RentalRepository rentalRepository, FileService fileService, UserService userService) {
     this.rentalRepository = rentalRepository;
     this.fileService = fileService;
+    this.userService = userService;
   }
 
   public List<Rental> getAllRentals(){
@@ -41,13 +44,13 @@ public class RentalService {
       price,
       filePath,
       description,
-      ownerId
+      userService.findUserById(ownerId)
     );
 
     rentalRepository.save(newRental);
   }
 
-  public Rental getRentalById(Long id) {
+  public Rental getRentalById(Integer id) {
     return rentalRepository.findById(id)
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Rental not found"));
   }

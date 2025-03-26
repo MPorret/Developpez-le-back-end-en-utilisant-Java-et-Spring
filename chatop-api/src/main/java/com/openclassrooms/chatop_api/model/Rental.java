@@ -1,9 +1,9 @@
 package com.openclassrooms.chatop_api.model;
 
-import com.openclassrooms.chatop_api.dto.RentalDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,7 +11,8 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name="`RENTALS`")
+@RequiredArgsConstructor
+@Table(name="RENTALS")
 public class Rental {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,8 +35,9 @@ public class Rental {
   @Size(max=2000, message = "The description cannot exceed 2000 characters")
   private String description;
 
-  @Column(nullable = false, name = "owner_id")
-  private Integer ownerId;
+  @ManyToOne
+  @JoinColumn(name = "owner_id", nullable = false)
+  private User owner;
 
   @CreationTimestamp
   @Column(updatable = false, name = "created_at")
@@ -45,14 +47,12 @@ public class Rental {
   @Column(name = "updated_at")
   private Date updatedAt;
 
-  public Rental(){}
-
-  public Rental(String name, Integer surface, Integer price, String picture, String description, Integer ownerId){
+  public Rental(String name, Integer surface, Integer price, String picture, String description, User owner){
     this.name = name;
     this.surface = surface;
     this.price = price;
     this.picture = picture;
     this.description = description;
-    this.ownerId = ownerId;
+    this.owner = owner;
   }
 }

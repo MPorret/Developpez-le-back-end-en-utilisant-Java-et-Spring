@@ -7,14 +7,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
-  private MessageRepository messageRepository;
+  private final MessageRepository messageRepository;
+  private final UserService userService;
+  private final RentalService rentalService;
 
-  public MessageService(MessageRepository messageRepository){
+  public MessageService(MessageRepository messageRepository, UserService userService, RentalService rentalService){
     this.messageRepository = messageRepository;
+    this.userService = userService;
+    this.rentalService = rentalService;
   }
 
   public void saveMessage(MessageDTO message){
-    Message newMessage = new Message(message);
+    Message newMessage = new Message(
+      message.getMessage(),
+      userService.findUserById(message.getUserId()),
+      rentalService.getRentalById(message.getRentalId())
+      );
     messageRepository.save(newMessage);
   }
 }
