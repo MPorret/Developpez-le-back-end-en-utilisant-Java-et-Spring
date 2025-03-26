@@ -1,8 +1,8 @@
 package com.openclassrooms.chatop_api.services;
 
 import com.openclassrooms.chatop_api.model.Rental;
-import com.openclassrooms.chatop_api.model.User;
 import com.openclassrooms.chatop_api.repository.RentalRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,16 +12,11 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RentalService {
   private final RentalRepository rentalRepository;
   private final FileService fileService;
   private final UserService userService;
-
-  public RentalService (RentalRepository rentalRepository, FileService fileService, UserService userService) {
-    this.rentalRepository = rentalRepository;
-    this.fileService = fileService;
-    this.userService = userService;
-  }
 
   public List<Rental> getAllRentals(){
    return rentalRepository.findAll();

@@ -4,6 +4,7 @@ import com.openclassrooms.chatop_api.dto.RegisterDTO;
 import com.openclassrooms.chatop_api.model.User;
 import com.openclassrooms.chatop_api.dto.LoginDTO;
 import com.openclassrooms.chatop_api.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,18 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
   private final BCryptPasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
   private final JWTService jwtService;
   private final AuthenticationManager authenticationManager;
-
-  public UserService(UserRepository userRepository, JWTService jwtService, AuthenticationManager authenticationManager) {
-    this.passwordEncoder = new BCryptPasswordEncoder();
-    this.userRepository = userRepository;
-    this.jwtService = jwtService;
-    this.authenticationManager = authenticationManager;
-  }
 
     public String registerUser(RegisterDTO registerDTO) {
 

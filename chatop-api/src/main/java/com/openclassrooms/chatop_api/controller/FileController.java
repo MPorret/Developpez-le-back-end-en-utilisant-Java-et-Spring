@@ -20,11 +20,11 @@ import java.nio.file.Paths;
 @RestController
 @Tag(name = "File's routes" )
 public class FileController {
-  private final String UPLOAD_DIR = "uploads/"; // Dossier où sont stockées les images
 
   @GetMapping("/uploads/{imageName}")
   @Operation(summary = "Get an image")
   public ResponseEntity<Resource> getImage(@PathVariable String imageName) throws IOException {
+    String UPLOAD_DIR = "uploads/";
     Path imagePath = Paths.get(UPLOAD_DIR).resolve(imageName).normalize();
     Resource resource = new UrlResource(imagePath.toUri());
 
@@ -32,7 +32,6 @@ public class FileController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found");
     }
 
-    // Détecte le type MIME du fichier (image/jpeg, image/png, etc.)
     String contentType = Files.probeContentType(imagePath);
     if (contentType == null) {
       contentType = "application/octet-stream";
