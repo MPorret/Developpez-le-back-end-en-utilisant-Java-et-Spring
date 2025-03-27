@@ -50,12 +50,16 @@ public class RentalService {
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Rental not found"));
   }
 
-  public void updateRental(Rental rental, String name, String description, Integer price, Integer surface) {
+  public void updateRental(Rental rental, String name, String description, Integer price, Integer surface, Integer userId) {
     rental.setName(name);
     rental.setPrice(price);
     rental.setDescription(description);
     rental.setSurface(surface);
 
-    rentalRepository.save(rental);
+    if (userId.equals(rental.getOwner().getId())){
+      rentalRepository.save(rental);
+    } else {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not the owner oh this rental");
+    }
   }
 }

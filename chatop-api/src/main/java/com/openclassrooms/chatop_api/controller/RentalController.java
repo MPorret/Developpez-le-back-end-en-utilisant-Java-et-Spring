@@ -66,9 +66,11 @@ public class RentalController {
     @RequestParam("name") String name,
     @RequestParam("description") String description,
     @RequestParam("price") Integer price,
-    @RequestParam("surface") Integer surface){
+    @RequestParam("surface") Integer surface,
+    Authentication authentication){
     Rental rental = rentalService.getRentalById(id);
-    rentalService.updateRental(rental, name, description, price, surface);
+    Integer userId = userService.findUserByEmail(authentication.getName()).getId();
+    rentalService.updateRental(rental, name, description, price, surface, userId);
     return new ResponseDTO("Rental updated");
   }
 }
