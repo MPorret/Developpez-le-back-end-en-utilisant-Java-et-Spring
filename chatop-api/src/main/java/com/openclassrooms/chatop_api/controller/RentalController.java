@@ -71,6 +71,7 @@ public class RentalController {
     Rental rental = rentalService.getRentalById(id);
     Integer userId = userService.findUserByEmail(authentication.getName()).getId();
     rentalService.updateRental(rental, name, description, price, surface, userId);
+
     return new ResponseDTO("Rental updated");
   }
 }

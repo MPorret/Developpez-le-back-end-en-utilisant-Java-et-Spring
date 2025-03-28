@@ -13,7 +13,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class RentalDTO {
   @Schema(description = "Id of the rental", example= "35")
   private Integer id;

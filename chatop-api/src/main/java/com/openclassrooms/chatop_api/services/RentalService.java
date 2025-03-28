@@ -51,15 +51,15 @@ public class RentalService {
   }
 
   public void updateRental(Rental rental, String name, String description, Integer price, Integer surface, Integer userId) {
-    rental.setName(name);
-    rental.setPrice(price);
-    rental.setDescription(description);
-    rental.setSurface(surface);
 
     if (userId.equals(rental.getOwner().getId())){
+      rental.setName(name);
+      rental.setPrice(price);
+      rental.setDescription(description);
+      rental.setSurface(surface);
       rentalRepository.save(rental);
     } else {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not the owner oh this rental");
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not the owner of this rental");
     }
   }
 }
