@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +26,7 @@ public class FileController {
     ImageDTO image = fileService.getImage(imageName);
 
     return ResponseEntity.ok()
-      .contentType(MediaType.parseMediaType(image.getContentType()))
-      .body(image.getResource());
+      .contentType(MediaType.parseMediaType(image.contentType()))
+      .body(image.resource());
   }
 }
