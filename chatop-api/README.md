@@ -90,6 +90,5 @@ Now you can use all the routes.
 - The API is protected with **Spring Security**.
 - Authentication is made using **JWT tokens**.
 - **Password encryption** is applied.
-- Token expiration is set to **1 hour**.
 - **Session management** is stateless.
 - All routes require authentication except for login, register, and Swagger.
